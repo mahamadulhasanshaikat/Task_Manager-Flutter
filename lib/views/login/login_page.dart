@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               SizedBox(height: 150),
               Text(
-                "Get Started with",
+                "Get Started With",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
 
@@ -35,9 +35,9 @@ class _LoginPageState extends State<LoginPage> {
 
               FilledButton(
                 onPressed: () {},
-                child: Icon(Icons.arrow_circle_right_outlined),
+                child: Icon(Icons.arrow_forward_ios_outlined, size: 20),
               ),
-              SizedBox(height: 35),
+              SizedBox(height: 70),
 
               Center(
                 child: Column(
@@ -52,7 +52,10 @@ class _LoginPageState extends State<LoginPage> {
                     RichText(
                       text: TextSpan(
                         text: "Don,t have an account?",
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
                         children: [
                           TextSpan(
                             text: " Registration",
