@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/widgets/screen_bg.dart';
 
@@ -9,6 +10,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +63,11 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           TextSpan(
                             text: " Registration",
-                            style: TextStyle(color: Colors.green),
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            recognizer: TapGestureRecognizer()..onTap 
                           ),
                         ],
                       ),
