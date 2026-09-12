@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager/views/main_nav/main_nav_page.dart';
 import 'package:task_manager/views/registration/regi_page.dart';
 import 'package:task_manager/widgets/screen_bg.dart';
 
@@ -43,7 +44,12 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 20),
 
               FilledButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainNavPage()),
+                  );
+                },
                 child: Icon(Icons.arrow_forward_ios_outlined, size: 20),
               ),
               SizedBox(height: 70),

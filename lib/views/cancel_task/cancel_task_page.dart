@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../new_task/widgets/task_card.dart';
+
 class CancelTaskPage extends StatefulWidget {
   const new({super.key});
 
@@ -10,6 +12,13 @@ class CancelTaskPage extends StatefulWidget {
 class _CancelTaskPageState extends State<CancelTaskPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: 20,
+        itemBuilder: (context, index) {
+          return TaskCard();
+        },
+      ),
+    );
   }
 }

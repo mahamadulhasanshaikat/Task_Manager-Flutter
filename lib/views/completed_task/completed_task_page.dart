@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../new_task/widgets/task_card.dart';
+
 class CompletedTaskPage extends StatefulWidget {
   const new({super.key});
 
@@ -10,6 +12,15 @@ class CompletedTaskPage extends StatefulWidget {
 class _CompletedTaskPageState extends State<CompletedTaskPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: 20,
+        itemBuilder: (context, index) {
+          return TaskCard();
+        },
+      ),
+    );
+ 
+ 
   }
 }
