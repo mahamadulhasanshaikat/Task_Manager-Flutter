@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager/views/registration/regi_page.dart';
 import 'package:task_manager/widgets/screen_bg.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,8 +11,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
-
+  void onTapRegistration() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RegiPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +72,8 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.green,
                               fontWeight: FontWeight.bold,
                             ),
-                            recognizer: TapGestureRecognizer()..onTap 
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = onTapRegistration,
                           ),
                         ],
                       ),

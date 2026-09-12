@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager/views/login/login_page.dart';
 import 'package:task_manager/widgets/screen_bg.dart';
 
 class RegiPage extends StatefulWidget {
@@ -9,6 +11,13 @@ class RegiPage extends StatefulWidget {
 }
 
 class _RegiPageState extends State<RegiPage> {
+  void onTapLogin() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,14 +34,18 @@ class _RegiPageState extends State<RegiPage> {
               ),
 
               SizedBox(height: 25),
-              TextFormField(decoration: InputDecoration(hintText: 'First Name')),
+              TextFormField(decoration: InputDecoration(hintText: 'Email')),
+              SizedBox(height: 25),
+              TextFormField(
+                decoration: InputDecoration(hintText: 'First Name'),
+              ),
               SizedBox(height: 25),
               TextFormField(decoration: InputDecoration(hintText: 'Last Name')),
+
               SizedBox(height: 25),
-              TextFormField(decoration: InputDecoration(hintText: 'Email')),
+              TextFormField(decoration: InputDecoration(hintText: 'Mobile')),
               SizedBox(height: 25),
-              TextFormField(decoration: InputDecoration(hintText: 'Email')),
-              SizedBox(height: 25),
+
               TextFormField(
                 obscureText: true,
                 decoration: InputDecoration(hintText: 'Password'),
@@ -48,24 +61,22 @@ class _RegiPageState extends State<RegiPage> {
               Center(
                 child: Column(
                   children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Forget Password...?',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
                     RichText(
                       text: TextSpan(
-                        text: "Don,t have an account?",
+                        text: "Already have an account?",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
                         ),
                         children: [
                           TextSpan(
-                            text: " Registration",
-                            style: TextStyle(color: Colors.green),
+                            text: " Login",
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = onTapLogin,
                           ),
                         ],
                       ),
