@@ -4,11 +4,7 @@ class TaskCardCount extends StatelessWidget {
   final String title;
   final int count;
 
-  const TaskCardCount({
-    super.key,
-    required this.title,
-    required this.count,
-  });
+  const TaskCardCount({super.key, required this.title, required this.count});
 
   // স্ট্যাটাস ভিত্তিক আধুনিক অ্যাকসেন্ট কালার
   Color _getStatusColor(String status) {
@@ -34,10 +30,7 @@ class TaskCardCount extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: statusColor.withOpacity(0.2),
-          width: 1.2,
-        ),
+        border: Border.all(color: statusColor.withOpacity(0.2), width: 1.2),
         boxShadow: [
           BoxShadow(
             color: statusColor.withOpacity(0.06),
@@ -67,7 +60,7 @@ class TaskCardCount extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          
+
           // ক্যাটাগরি টাইটেল
           Text(
             title,

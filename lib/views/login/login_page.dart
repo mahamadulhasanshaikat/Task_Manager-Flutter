@@ -283,48 +283,28 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                       ),
                     ),
-                    const SizedBox(height: 48),
-
-                    // Footer Options
+                    SizedBox(height: 58),
                     Center(
-                      child: Column(
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              // Forgot Password navigation logic
-                            },
-                            child: const Text(
-                              'Forgot Password?',
-                              style: TextStyle(
-                                color: Color(0xFF64748B),
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
-                              ),
-                            ),
+                      child: RichText(
+                        text: TextSpan(
+                          text: "Don't have an account? ",
+                          style: const TextStyle(
+                            color: Color(0xFF64748B),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
                           ),
-                          const SizedBox(height: 8),
-                          RichText(
-                            text: TextSpan(
-                              text: "Don't have an account? ",
+                          children: [
+                            TextSpan(
+                              text: "Sign Up",
                               style: const TextStyle(
-                                color: Color(0xFF64748B),
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF0F172A),
+                                fontWeight: FontWeight.w700,
                               ),
-                              children: [
-                                TextSpan(
-                                  text: "Sign Up",
-                                  style: const TextStyle(
-                                    color: Color(0xFF0F172A),
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = _onTapRegistration,
-                                ),
-                              ],
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = _onTapRegistration,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
