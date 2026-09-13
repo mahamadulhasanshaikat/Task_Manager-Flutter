@@ -28,8 +28,18 @@ class _TaskCardState extends State<TaskCard> {
     try {
       final parsed = DateTime.parse(rawDate);
       const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ];
       return '${parsed.day} ${months[parsed.month - 1]}, ${parsed.year}';
     } catch (_) {
@@ -37,25 +47,7 @@ class _TaskCardState extends State<TaskCard> {
     }
   }
 
-  Future<void> _updateStatus(String newStatus) async {
-    setState(() => _isLoading = true);
-    final ApiResponse response = await ApiCaller.getRequest(
-      url: TMUrls.updateTaskStatusUrl(widget.taskModel.sId ?? '', newStatus),
-    );
-    setState(() => _isLoading = false);
-
-    if (response.isSuccess) {
-      widget.refreshParent();
-    } else if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to update status'),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
-  }
-
+  // ডিলিট অপারেশন
   Future<void> _deleteTask() async {
     setState(() => _isLoading = true);
     final ApiResponse response = await ApiCaller.getRequest(
@@ -63,18 +55,29 @@ class _TaskCardState extends State<TaskCard> {
     );
     setState(() => _isLoading = false);
 
-    if (response.isSuccess) {
-      widget.refreshParent();
-    } else if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to delete task'),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+    if (mounted) {
+      if (response.isSuccess) {
+        widget.refreshParent();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Task deleted successfully'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Color(0xFF0F172A),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to delete task'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
+  // ডিলিট কনফার্মেশন শিট
   void _confirmDelete() {
     showModalBottomSheet(
       context: context,
@@ -153,75 +156,142 @@ class _TaskCardState extends State<TaskCard> {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  void _showStatusDialog() {
-    final statusList = ['New', 'Progress', 'Completed', 'Cancelled'];
+  // এডিট টাস্ক ফর্ম
+  void _showEditBottomSheet() {
+    final titleController = TextEditingController(text: widget.taskModel.title);
+    final descController = TextEditingController(
+      text: widget.taskModel.description,
+    );
+    final formKey = GlobalKey<FormState>();
+
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+      builder: (ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+          ),
+          child: Form(
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  child: Text(
-                    'Change Status',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF0F172A),
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                 ),
-                const Divider(height: 1),
-                ...statusList.map(
-                  (status) {
-                    final isCurrent = widget.taskModel.status?.toLowerCase() ==
-                        status.toLowerCase();
-                    return ListTile(
-                      dense: true,
-                      leading: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: widget.cardColor,
-                        ),
+                const SizedBox(height: 18),
+                const Text(
+                  'Edit Task',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF0F172A),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                TextFormField(
+                  controller: titleController,
+                  decoration: InputDecoration(
+                    labelText: 'Task Title',
+                    labelStyle: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 13,
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFFF8FAFC),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                    ),
+                  ),
+                  validator: (val) =>
+                      val == null || val.trim().isEmpty ? 'Enter title' : null,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: descController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    labelStyle: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 13,
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFFF8FAFC),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0F172A),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      title: Text(
-                        status,
-                        style: TextStyle(
-                          fontWeight:
-                              isCurrent ? FontWeight.w700 : FontWeight.w500,
-                          color: isCurrent
-                              ? widget.cardColor
-                              : const Color(0xFF334155),
-                        ),
+                    ),
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        Navigator.pop(ctx);
+                        setState(() {
+                          widget.taskModel.title = titleController.text.trim();
+                          widget.taskModel.description = descController.text
+                              .trim();
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Task updated successfully'),
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: Color(0xFF0F172A),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text(
+                      'Update Task',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
                       ),
-                      trailing: isCurrent
-                          ? Icon(Icons.check_rounded,
-                              color: widget.cardColor, size: 18)
-                          : null,
-                      onTap: () {
-                        Navigator.pop(context);
-                        if (!isCurrent) _updateStatus(status);
-                      },
-                    );
-                  },
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -299,19 +369,22 @@ class _TaskCardState extends State<TaskCard> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           onSelected: (val) {
-                            if (val == 'status') _showStatusDialog();
+                            if (val == 'edit') _showEditBottomSheet();
                             if (val == 'delete') _confirmDelete();
                           },
                           itemBuilder: (context) => [
                             const PopupMenuItem(
-                              value: 'status',
+                              value: 'edit',
                               child: Row(
                                 children: [
-                                  Icon(Icons.swap_horiz_rounded,
-                                      size: 17, color: Color(0xFF475569)),
+                                  Icon(
+                                    Icons.edit_outlined,
+                                    size: 17,
+                                    color: Color(0xFF475569),
+                                  ),
                                   SizedBox(width: 10),
                                   Text(
-                                    'Change Status',
+                                    'Edit Task',
                                     style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500,
@@ -324,8 +397,11 @@ class _TaskCardState extends State<TaskCard> {
                               value: 'delete',
                               child: Row(
                                 children: [
-                                  Icon(Icons.delete_outline_rounded,
-                                      size: 17, color: Color(0xFFDC2626)),
+                                  Icon(
+                                    Icons.delete_outline_rounded,
+                                    size: 17,
+                                    color: Color(0xFFDC2626),
+                                  ),
                                   SizedBox(width: 10),
                                   Text(
                                     'Delete',
@@ -358,44 +434,37 @@ class _TaskCardState extends State<TaskCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      InkWell(
-                        onTap: _showStatusDialog,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: widget.cardColor.withOpacity(0.08),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 6,
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: widget.cardColor,
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                widget.taskModel.status ?? 'New',
-                                style: TextStyle(
-                                  color: widget.cardColor,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(width: 2),
-                              Icon(
-                                Icons.arrow_drop_down_rounded,
-                                size: 16,
+                      // স্ট্যাটিক ব্যাজ (ড্রপডাউন বা ক্লিক বাদ দেওয়া হয়েছে)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 9,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: widget.cardColor.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
                                 color: widget.cardColor,
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              widget.taskModel.status ?? 'New',
+                              style: TextStyle(
+                                color: widget.cardColor,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Row(
