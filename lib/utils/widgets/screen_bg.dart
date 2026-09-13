@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../utils/asset_path.dart';
+import '../asset_path.dart';
 
 class ScreenBG extends StatelessWidget {
   final Widget child;

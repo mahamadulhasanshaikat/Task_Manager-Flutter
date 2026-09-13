@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/utils/asset_path.dart';
 
-import '../../widgets/screen_bg.dart';
+import '../../utils/widgets/screen_bg.dart';
 import '../login/login_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -21,6 +21,7 @@ class _SplashPageState extends State<SplashPage> {
   Future moveToNextPage() async {
     await Future.delayed(Duration(seconds: 3));
     Navigator.pushReplacement(
+      // ignore: use_build_context_synchronously
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),
     );

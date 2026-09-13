@@ -1,8 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:task_manager/views/main_nav/main_nav_page.dart';
+import 'package:task_manager/controller/auth_controller.dart';
+import 'package:task_manager/models/api_response.dart';
+import 'package:task_manager/models/user_model.dart';
+import 'package:task_manager/service/api_caller.dart';
+import 'package:task_manager/utils/urls.dart';
 import 'package:task_manager/views/registration/regi_page.dart';
-import 'package:task_manager/widgets/screen_bg.dart';
+import 'package:task_manager/utils/widgets/screen_bg.dart';
+
+import '../main_nav/main_nav_page.dart';
 
 class LoginPage extends StatefulWidget {
   const new({super.key});
@@ -12,11 +20,40 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   void onTapRegistration() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => RegiPage()),
     );
+  }
+
+  Future<void> onTapLogin() async {
+    final ApiResponse response = await ApiCaller.postRequest(
+      url: TMUrls.loginUrl,
+      body: {
+        "email": emailController.text.trim(),
+        "password": passwordController.text,
+      },
+    );
+
+    if (response.isSuccess) {
+      UserModel model = UserModel.fromJson(response.responseData['data']);
+
+      String token = response.responseData['token'];
+
+      AuthController.saveUserData(model, token);
+
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainNavPage()),
+      );
+    } else {
+      log(response.responseData['data'].toString());
+    }
   }
 
   @override
@@ -35,9 +72,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
 
               SizedBox(height: 25),
-              TextFormField(decoration: InputDecoration(hintText: 'Email')),
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(hintText: 'Email'),
+              ),
               SizedBox(height: 25),
               TextFormField(
+                controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(hintText: 'Password'),
               ),
@@ -45,10 +86,7 @@ class _LoginPageState extends State<LoginPage> {
 
               FilledButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainNavPage()),
-                  );
+                  onTapLogin();
                 },
                 child: Icon(Icons.arrow_forward_ios_outlined, size: 20),
               ),

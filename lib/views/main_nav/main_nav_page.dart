@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/views/cancel_task/cancel_task_page.dart';
 import 'package:task_manager/views/new_task/new_task_page.dart';
 import 'package:task_manager/views/progress_task/progress_task_page.dart';
-
 import '../completed_task/completed_task_page.dart';
 
 class MainNavPage extends StatefulWidget {
