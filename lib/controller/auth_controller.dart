@@ -17,7 +17,7 @@ class AuthController {
     userData = model;
   }
 
-  static Future getUserData(UserModel model, String token) async {
+  static Future getUserData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     String? user = sharedPreferences.getString('user_data');
@@ -25,5 +25,13 @@ class AuthController {
     if (user != null) {
       userData = UserModel.fromJson(jsonDecode(user));
     }
+  }
+
+  static Future<bool> isUserLogin() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    String? token = sharedPreferences.getString('token');
+
+    return token != null;
   }
 }
