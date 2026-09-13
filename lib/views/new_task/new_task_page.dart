@@ -15,6 +15,13 @@ class NewTaskPage extends StatefulWidget {
 }
 
 class _NewTaskPageState extends State<NewTaskPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    getAllTaskCount();
+  }
+
   List<TaskStatusCountModel> taskCountByStatus = [];
 
   Future<void> getAllTaskCount() async {
@@ -48,11 +55,14 @@ class _NewTaskPageState extends State<NewTaskPage> {
             height: 100,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: 4,
+              itemCount: taskCountByStatus.length,
               itemBuilder: (context, index) {
                 return SizedBox(
                   width: 100,
-                  child: TaskCardCount(title: 'New', count: 25),
+                  child: TaskCardCount(
+                    title: taskCountByStatus[index].sId.toString(),
+                    count: taskCountByStatus[index].sum!.toInt(),
+                  ),
                 );
               },
               separatorBuilder: (BuildContext context, int index) {
